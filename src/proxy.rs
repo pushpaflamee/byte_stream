@@ -275,19 +275,3 @@ fn stream_response(
         builder.body(actix_web::body::BodyStream::new(stream))
     }
 }
-
-
-// Add this to src/proxy.rs or a new handler file
-use crate::crypto::encrypt_url;
-use actix_web::{web, HttpResponse, Responder};
-use serde::Deserialize;
-
-#[derive(Deserialize)]
-pub struct EncodeQuery {
-    pub url: String,
-}
-
-pub async fn encode_handler(query: web::Query<EncodeQuery>) -> impl Responder {
-    let encrypted = encrypt_url(&query.url);
-    HttpResponse::Ok().body(encrypted)
-}
